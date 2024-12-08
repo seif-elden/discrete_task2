@@ -1,7 +1,7 @@
 ## ReadMe: Explanation and Dry Run for the Logic Circuit Analysis Program
 
 ### Overview
-This C++ program analyzes logical circuit expressions, compares their behavior, and evaluates properties such as equivalence, satisfiability, and tautology. The program takes two logical expressions in **infix notation** (e.g., `(A & B) | (!C)`), converts them into **postfix notation** (e.g., `AB&C|!`), and processes them.
+This C++ program analyzes logical circuit expressions, compares their behavior, and evaluates properties such as equivalence, satisfiability, and tautology. The program takes two logical expressions in **infix notation** (e.g., `(A & B) | (!C)`), converts them into **postfix notation** (e.g., `AB&C!|`), and processes them.
 
 Key functionalities include:
 1. **Infix to Postfix Conversion:** Converts user-friendly infix expressions to postfix for easier evaluation.
@@ -56,14 +56,14 @@ This function converts infix expressions (human-readable format) to postfix nota
 | 8        | `!`           | Push `!` onto the stack (highest precedence)                             | `[\|,(,!]`       | `"AB&"`           |
 | 9        | `C`           | Append operand `C` to the postfix string                                 | `[\|,(,!]`       | `"AB&C"`          |
 | 10       | `)`           | Pop and append operators until `(` is encountered, then discard `(`     | `[\|]`              | `"AB&C!"`         |
-| 11       | End of input  | Pop all remaining operators from the stack and append to the postfix     | `[]`                 | `"AB&C\|!"`        |
+| 11       | End of input  | Pop all remaining operators from the stack and append to the postfix     | `[]`                 | `"AB&C!\|"`        |
 
 ---
 
 #### Final Output:
 **Postfix Expression:**  
 ```plaintext
-AB&C|!
+AB&C!|
 ```
 
 ---
@@ -77,7 +77,7 @@ AB&C|!
 
 **Postfix Output:**  
 ```plaintext
-AB&C|!
+AB&C!|
 ```  
 
 The corrected dry run confirms the accurate conversion of the infix expression to postfix.
@@ -106,7 +106,7 @@ This function evaluates a postfix logical expression using a stack. It supports:
 Let's perform a **dry run** for the `evaluateExpression` function with the following input:
 
 ### Input:
-- **Postfix Expression:** `AB&C|!`
+- **Postfix Expression:** `AB&C!|`
 - **Variable Values (Map):**
   ```
   A = true, B = false, C = true
@@ -127,8 +127,8 @@ Let's perform a **dry run** for the `evaluateExpression` function with the follo
 | 2        | `B`           | Push value of `B` (`false`) onto stack   | `[true, false]`          |
 | 3        | `&`           | Pop two values (`true`, `false`), apply AND (`true && false = false`), push result | `[false]`                |
 | 4        | `C`           | Push value of `C` (`true`) onto stack    | `[false, true]`          |
-| 5        | `\|`           | Pop two values (`false`, `true`), apply OR (`false \| true = true`), push result | `[true]`                 |
-| 6        | `!`           | Pop one value (`true`), apply NOT (`!true = false`), push result | `[false]`                |
+| 5        | `!`           | Pop one value (`true`), apply NOT (`!true = false`), push result | `[false,false]`                |
+| 6        | `\|`           | Pop two values (`false`, `false`), apply OR (`false \| false = false`), push result | `[false]`                 |
 
 ---
 
@@ -140,7 +140,7 @@ Let's perform a **dry run** for the `evaluateExpression` function with the follo
 
 
 #### Verification:
-- **Postfix Expression:** `AB&C|!`
+- **Postfix Expression:** `AB&C!|`
 - **Variable Values:** `A = true, B = false, C = true`
 - **Evaluation Result:** `false`
 
@@ -189,7 +189,7 @@ infix2 = "( ( (A & B) | (!C) ) & ( (A & B) | (!C) ) ) | !( ( (A & B) | (!C) ) & 
 ```
 
 #### Conversion:
-- Circuit 1 (Postfix): `AB&C|!`
+- Circuit 1 (Postfix): `AB&C!|`
 - Circuit 2 (Postfix): `AB&C|AB&C|&AB&C|AB&C|&!|`
 
 #### Truth Table:
@@ -266,6 +266,6 @@ The two circuits are not equivalent.
 
 Circuit 1 is: Tautology
 Circuit 2 is: Satisfiable
-Modified Circuit 1 to: AA!&
+Modified Circuit 1 
 
 ```
